@@ -1,51 +1,63 @@
-import React, {useState} from 'react'
-import "./cart.css"
-import { products } from './product';
-import Items  from './Items';
-import { Scrollbars } from 'react-custom-scrollbars-2';
+import React, { createContext, useContext, useReducer } from "react";
+import "./cart.css";
+import { products } from "./product";
+import ContextCart from "./ContextCart";
+import reducer from "./reducer";
+
+// create a context
+export const CartContext = createContext();
+
+const initialState = {
+  item: products,
+  totalAmount: 25600,
+  totalItems: 0,
+  quantity: 1,
+};
 
 const Cart = () => {
+  // inPlace of useState we will use the useReducer Hook
+  // const [item, setItem] = useState(products);
 
-    const [item, setItem] = useState(products);
+  const [state, dispatch] = useReducer(reducer, initialState);
 
-    return (
-        <>
-         <header>
-                <div className="continue-shopping">
-                    <img src="./images/arrow.png" alt="arrow" className="arrow-icon" />
-                    <h3>continue shoping</h3>
-                </div>
+  const clearCart = () => {
+    return dispatch({ type: "CLEAR_CART" });
+  };
 
-                <div className="cart-icon">
-                    <img src="./images/cart.png" alt="cart-logo" />
-                    <p>7</p>
-                </div>
-            </header>
-            <section className="main-cart-section">
-                <h1>shopping Cart</h1>
-                <p className="total-items">you have <span className="total-items-count"> 7 </span>  items in shopping cart</p>
+  const removeItem = (id) => {
+    return dispatch({
+      type: "REMOVE_ITEM",
+      payload: id,
+    });
+  };
 
-                <div className="cart-items">
-                   
-                    <div className="cart-items-container">
-                         <Scrollbars className="cart-items-container" >
-                    {
-                            item.map((curItem) => {
-                                 return  <Items key={curItem.id}  {...curItem} />
-                             })
-                        }
-                    
-                         </Scrollbars>
-                    </div>
-                </div>
-                 <div className="card-total">
-                    <h3>card total: <span> 23000₹ </span></h3>
-                    <button>CheckOut</button>
-                </div>
-                
-            </section>
-        </>
-    )
-}
+  const increment = (id) => {
+    return dispatch({
+      type: "INCREMENT",
+      payload: id,
+    });
+  };
 
-export default Cart
+  const decrement = (id) => {
+    return dispatch({
+      type: "DECREMENT",
+      payload: id,
+    });
+  };
+
+  return (
+    <>
+      <CartContext.Provider
+        value={{ ...state, clearCart, removeItem, increment, decrement }}>
+        <ContextCart />
+      </CartContext.Provider>
+    </>
+  );
+};
+
+// custom Hook
+export const useGlobalContext = () => {
+  return useContext(CartContext);
+};
+
+export default Cart;
