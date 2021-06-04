@@ -4,7 +4,7 @@ import Items from "./Items";
 import { CartContext } from "./Cart";
 
 const ContextCart = () => {
-  const item = useContext(CartContext);
+  const { item } = useContext(CartContext);
 
   return (
     <>
