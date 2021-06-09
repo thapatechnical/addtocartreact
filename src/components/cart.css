@@ -311,6 +311,15 @@ header {
   background-color: #0077dc;
 }
 
+.card-total .clear-cart {
+  margin-left: 3rem;
+  background-color: rgb(209, 61, 61);
+}
+
+.card-total .clear-cart:hover {
+  background-color: rgb(197, 5, 5);
+}
+
 /* responsive media queries  */
 
 @media (max-width: 968px) {
@@ -322,6 +331,7 @@ header {
 @media (max-width: 768px) {
   .continue-shopping h3 {
     margin-left: 0;
+    font-size: 1.85rem;
   }
 
   .items-info {

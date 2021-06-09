@@ -1,4 +1,4 @@
-import React, { createContext, useReducer } from "react";
+import React, { createContext, useReducer, useEffect } from "react";
 import "./cart.css";
 import { products } from "./products";
 import ContextCart from "./ContextCart";
@@ -24,8 +24,36 @@ const Cart = () => {
     });
   };
 
+  // clear the cart
+  const clearCart = () => {
+    return dispatch({ type: "CLEAR_CART" });
+  };
+
+  // increment the item
+  const increment = (id) => {
+    return dispatch({
+      type: "INCREMENT",
+      payload: id,
+    });
+  };
+
+  // decrement the item
+  const decrement = (id) => {
+    return dispatch({
+      type: "DECREMENT",
+      payload: id,
+    });
+  };
+
+  // we will use the useEffect to update the data
+  useEffect(() => {
+    dispatch({ type: "GET_TOTAL" });
+    // console.log("Awesome");
+  }, [state.item]);
+
   return (
-    <CartContext.Provider value={{ ...state, removeItem }}>
+    <CartContext.Provider
+      value={{ ...state, removeItem, clearCart, increment, decrement }}>
       <ContextCart />
     </CartContext.Provider>
   );
